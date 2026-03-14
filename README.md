@@ -1,4 +1,4 @@
-# OpenClaw Voice 伙伴 语音伙伴模块-Omi
+# Omi -- OpenClaw Voice Companion 小龙虾语音伙伴模块
 
 ## 为什么这个项目值得用
 

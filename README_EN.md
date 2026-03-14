@@ -1,4 +1,4 @@
-# OpenClaw Voice Companion Module - Omi
+# Omi -- OpenClaw Voice Companion
 
 A local macOS voice front-end for OpenClaw.
 

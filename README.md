@@ -87,7 +87,7 @@ export ELEVENLABS_VOICE_ID="your_voice_id"
 你可以在 ElevenLabs 这里选择或创建你想要的音色：
 - [https://elevenlabs.io](https://elevenlabs.io)
 
-## 脚本版本
+## 运行方式
 ### 中文版
 文件：`voice_assistant.py`
 

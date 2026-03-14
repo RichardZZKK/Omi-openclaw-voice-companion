@@ -89,7 +89,7 @@ If these variables are missing, the assistant falls back to macOS `say`, but you
 You can choose or create the voice you want here:
 - [https://elevenlabs.io](https://elevenlabs.io)
 
-## Script variants
+## Run modes
 ### Chinese version
 File: `voice_assistant.py`
 

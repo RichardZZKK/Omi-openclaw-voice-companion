@@ -84,8 +84,6 @@ export ELEVENLABS_VOICE_ID="your_voice_id"
 
 当前默认使用的 ElevenLabs TTS 模型是：`eleven_v3`
 
-如果没有配置上述变量，项目会自动回退到 macOS `say`，但就无法使用更生动、更自然、可自定义或可克隆的音色。
-
 获取 API key 的方式很简单：
 - 登录 ElevenLabs
 - 进入你的账户或开发者设置页面
@@ -93,6 +91,24 @@ export ELEVENLABS_VOICE_ID="your_voice_id"
 
 你也可以在 ElevenLabs 这里选择、创建，或者克隆你想要的音色：
 - [https://elevenlabs.io](https://elevenlabs.io)
+
+如果你想改用本地 Qwen3-TTS 克隆音色：
+```bash
+python3 -m pip install --user qwen-tts
+brew install sox
+export OMI_VOICE_COMPANION_TTS_BACKEND="qwen"
+export QWEN_TTS_MODEL="Qwen/Qwen3-TTS-12Hz-0.6B-Base"
+export QWEN_TTS_REF_AUDIO="/path/to/your/reference.wav"
+# 如果你有参考音频对应文本，并且想用更完整的克隆模式：
+export QWEN_TTS_REF_TEXT="参考音频里说的话"
+export QWEN_TTS_X_VECTOR_ONLY="true"
+```
+
+说明：
+- `OMI_VOICE_COMPANION_TTS_BACKEND=qwen` 会把主回复切到本地 Qwen3-TTS
+- `QWEN_TTS_REF_AUDIO` 是克隆用的参考音频路径
+- 如果你没有 `QWEN_TTS_REF_TEXT`，保持 `QWEN_TTS_X_VECTOR_ONLY=true` 即可
+- 如果既没有配置 ElevenLabs，也没有配置 Qwen，项目会自动回退到 macOS `say`
 
 ## 可选配置
 如果你想改伙伴名字、提示词或唤醒词，可以直接编辑脚本文件：

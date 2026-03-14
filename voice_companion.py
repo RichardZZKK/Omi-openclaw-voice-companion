@@ -18,6 +18,7 @@ import argparse
 import json
 import os
 import subprocess
+import hashlib
 import tempfile
 import time
 import wave
@@ -170,29 +171,47 @@ from elevenlabs import ElevenLabs
 
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "").strip()
 ELEVENLABS_VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID", "").strip()
+ELEVENLABS_MODEL_ID = os.getenv("ELEVENLABS_MODEL_ID", "eleven_v3").strip() or "eleven_v3"
+QWEN_TTS_MODEL = os.getenv("QWEN_TTS_MODEL", "Qwen/Qwen3-TTS-12Hz-0.6B-Base").strip()
+QWEN_TTS_REF_AUDIO = os.getenv("QWEN_TTS_REF_AUDIO", "").strip()
+QWEN_TTS_REF_TEXT = os.getenv("QWEN_TTS_REF_TEXT", "").strip()
+QWEN_TTS_X_VECTOR_ONLY = os.getenv("QWEN_TTS_X_VECTOR_ONLY", "true").strip().lower() in {"1", "true", "yes", "on"}
+TTS_BACKEND = os.getenv("OMI_VOICE_COMPANION_TTS_BACKEND", "auto").strip().lower() or "auto"
 eleven_client = ElevenLabs(api_key=ELEVENLABS_API_KEY) if ELEVENLABS_API_KEY else None
+qwen_model = None
 
 
-def get_tts_cache_path(text: str) -> Path:
+def get_tts_cache_path(text: str, backend: str, suffix: str) -> Path:
     CACHE_DIR.mkdir(exist_ok=True)
-    safe_name = "".join(ch for ch in text if ch.isalnum())[:24] or "tts"
-    return CACHE_DIR / f"{safe_name}.mp3"
+    digest = hashlib.sha1(text.encode("utf-8")).hexdigest()[:16]
+    safe_name = "".join(ch for ch in text if ch.isalnum())[:24] or backend
+    return CACHE_DIR / f"{backend}-{safe_name}-{digest}.{suffix}"
 
 
-def ensure_tts_audio(text: str) -> Path | None:
+def get_effective_tts_backend() -> str:
+    if TTS_BACKEND in {"say", "elevenlabs", "qwen"}:
+        return TTS_BACKEND
+    if ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID:
+        return "elevenlabs"
+    if QWEN_TTS_REF_AUDIO:
+        return "qwen"
+    return "say"
+
+
+def ensure_elevenlabs_audio(text: str) -> Path | None:
     clean = " ".join(text.split())
     if not clean:
         return None
     if eleven_client is None or not ELEVENLABS_VOICE_ID:
         return None
-    cache_path = get_tts_cache_path(clean)
+    cache_path = get_tts_cache_path(clean, "elevenlabs", "mp3")
     if cache_path.exists() and cache_path.stat().st_size > 0:
         return cache_path
     try:
         audio = eleven_client.text_to_speech.convert(
             voice_id=ELEVENLABS_VOICE_ID,
             text=clean,
-            model_id="eleven_v3",
+            model_id=ELEVENLABS_MODEL_ID,
         )
         with open(cache_path, "wb") as handle:
             for chunk in audio:
@@ -200,6 +219,66 @@ def ensure_tts_audio(text: str) -> Path | None:
         return cache_path
     except Exception:
         return None
+
+
+def load_qwen_tts_model():
+    global qwen_model
+    if qwen_model is not None:
+        return qwen_model
+    if not QWEN_TTS_REF_AUDIO:
+        raise RuntimeError("QWEN_TTS_REF_AUDIO is not configured")
+    try:
+        import torch
+        from qwen_tts import Qwen3TTSModel
+    except Exception as exc:
+        raise RuntimeError(f"qwen-tts is not installed: {exc}") from exc
+
+    device = "mps" if torch.backends.mps.is_available() else "cpu"
+    qwen_model = Qwen3TTSModel.from_pretrained(
+        QWEN_TTS_MODEL,
+        device_map=device,
+        dtype=torch.float32,
+        attn_implementation="eager",
+    )
+    return qwen_model
+
+
+def ensure_qwen_audio(text: str) -> Path | None:
+    clean = " ".join(text.split())
+    if not clean:
+        return None
+    cache_path = get_tts_cache_path(clean, "qwen", "wav")
+    if cache_path.exists() and cache_path.stat().st_size > 0:
+        return cache_path
+    try:
+        import soundfile as sf
+
+        model = load_qwen_tts_model()
+        kwargs = {
+            "text": clean,
+            "language": "english" if path.name == "voice_companion_en.py" else "chinese",
+            "ref_audio": QWEN_TTS_REF_AUDIO,
+            "non_streaming_mode": True,
+        }
+        if QWEN_TTS_REF_TEXT and not QWEN_TTS_X_VECTOR_ONLY:
+            kwargs["ref_text"] = QWEN_TTS_REF_TEXT
+        else:
+            kwargs["x_vector_only_mode"] = True
+        wavs, sr = model.generate_voice_clone(**kwargs)
+        sf.write(cache_path, wavs[0], sr)
+        return cache_path
+    except Exception as exc:
+        print(f"Qwen TTS error: {exc}")
+        return None
+
+
+def ensure_tts_audio(text: str) -> Path | None:
+    backend = get_effective_tts_backend()
+    if backend == "elevenlabs":
+        return ensure_elevenlabs_audio(text)
+    if backend == "qwen":
+        return ensure_qwen_audio(text)
+    return None
 
 
 def speak(text: str, voice: str) -> None:
@@ -216,7 +295,7 @@ def speak(text: str, voice: str) -> None:
     try:
         cache_path = ensure_tts_audio(clean)
         if cache_path is None:
-            raise RuntimeError("failed to build ElevenLabs audio")
+            raise RuntimeError("failed to build TTS audio")
         subprocess.run(["afplay", str(cache_path)], check=True)
     except Exception as e:
         print(f"TTS error: {e}, falling back to say")
@@ -228,7 +307,7 @@ def speak_hint(text: str, voice: str) -> subprocess.Popen[bytes] | None:
     if not clean:
         return None
     try:
-        cache_path = ensure_tts_audio(clean)
+        cache_path = ensure_elevenlabs_audio(clean)
         if cache_path is not None:
             return subprocess.Popen(
                 ["afplay", str(cache_path)],
@@ -430,8 +509,13 @@ def main() -> None:
     parser.add_argument("--timeout", type=int, default=120, help="OpenClaw timeout")
     args = parser.parse_args()
 
-    if not ELEVENLABS_API_KEY or not ELEVENLABS_VOICE_ID:
-        print("ℹ️ 未配置 ElevenLabs，将回退到 macOS say 语音。")
+    backend = get_effective_tts_backend()
+    if backend == "elevenlabs":
+        print(f"ℹ️ 当前 TTS: ElevenLabs ({ELEVENLABS_MODEL_ID})")
+    elif backend == "qwen":
+        print(f"ℹ️ 当前 TTS: Qwen3-TTS ({QWEN_TTS_MODEL})")
+    else:
+        print("ℹ️ 当前 TTS: macOS say")
 
     if args.list_devices:
         print_devices()

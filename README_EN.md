@@ -77,7 +77,7 @@ If nothing pops up, check manually:
 
 Make sure `Terminal` is allowed.
 
-## Optional configuration
+## Configuration
 For ElevenLabs voice output:
 ```bash
 export ELEVENLABS_API_KEY="your_key"
@@ -86,7 +86,12 @@ export ELEVENLABS_VOICE_ID="your_voice_id"
 
 If these variables are missing, the assistant falls back to macOS `say`, but you will lose the more expressive, natural, customizable, and cloneable voice options.
 
-You can choose or create the voice you want here:
+Getting an API key is simple:
+- Sign in to ElevenLabs
+- Open your account or developer settings
+- Create an API key
+
+You can also choose, create, or clone the voice you want here:
 - [https://elevenlabs.io](https://elevenlabs.io)
 
 ## Run modes

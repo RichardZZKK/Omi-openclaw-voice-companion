@@ -75,7 +75,7 @@ python3 -m pip install --user -r requirements.txt
 
 确保 `Terminal` 已被允许。
 
-## 可选配置
+## 配置
 如果你想使用 ElevenLabs 音色：
 ```bash
 export ELEVENLABS_API_KEY="your_key"
@@ -84,7 +84,12 @@ export ELEVENLABS_VOICE_ID="your_voice_id"
 
 如果没有配置上述变量，项目会自动回退到 macOS `say`，但就无法使用更生动、更自然、可自定义或可克隆的音色。
 
-你可以在 ElevenLabs 这里选择或创建你想要的音色：
+获取 API key 的方式很简单：
+- 登录 ElevenLabs
+- 进入你的账户或开发者设置页面
+- 创建 API key
+
+你也可以在 ElevenLabs 这里选择、创建，或者克隆你想要的音色：
 - [https://elevenlabs.io](https://elevenlabs.io)
 
 ## 运行方式

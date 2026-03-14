@@ -14,7 +14,6 @@ English version: [README_EN.md](./README_EN.md)
 - 常驻监听唤醒词
 - 基于 macOS Speech.framework 的本地语音识别
 - 语音活动检测（VAD）自动结束录音
-- 通过独立语音会话调用 OpenClaw，避免复用无关上下文
 - ElevenLabs TTS 缓存播放，未配置时自动回退到 macOS `say`
 - 每次回答后保留 5 秒连续对话窗口，可直接追问
 
@@ -78,5 +77,4 @@ python3 voice_assistant_en.py --list-devices
 ```
 
 ## 说明
-- 每次运行都会使用一个独立的 OpenClaw 语音会话，减少被旧聊天上下文带偏。
 - 语音回复结束后，会继续保留 5 秒追问窗口，这段时间里不需要再次说唤醒词。

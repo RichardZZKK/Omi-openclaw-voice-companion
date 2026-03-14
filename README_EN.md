@@ -14,7 +14,6 @@ Note:
 - Always-listening wake phrase detection
 - Local speech recognition using macOS Speech.framework
 - Voice activity detection for automatic end-of-command capture
-- Dedicated OpenClaw voice session to avoid unrelated chat history bleed
 - ElevenLabs TTS with caching, with automatic fallback to macOS `say`
 - 5-second follow-up window after each reply for more natural conversations
 
@@ -78,5 +77,4 @@ python3 voice_assistant_en.py --list-devices
 ```
 
 ## Notes
-- Each run uses a dedicated OpenClaw voice session, which helps prevent contamination from unrelated conversations.
 - After each spoken reply, the assistant stays in follow-up mode for 5 seconds so you can continue without repeating the wake phrase.

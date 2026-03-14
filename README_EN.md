@@ -108,7 +108,6 @@ The most common places to customize are:
 If you want to turn it into your own named companion, the usual approach is:
 - change the wake phrases to the name you want to use
 - update the spoken prompts to match the personality you want
-- optionally update the README wording to match your customized version
 
 ## Run modes
 ### Chinese version

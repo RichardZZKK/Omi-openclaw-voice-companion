@@ -36,7 +36,10 @@ export ELEVENLABS_API_KEY="your_key"
 export ELEVENLABS_VOICE_ID="your_voice_id"
 ```
 
-If these variables are missing, the assistant falls back to macOS `say`.
+If these variables are missing, the assistant falls back to macOS `say`, but you will lose the more expressive, natural, customizable, and cloneable voice options.
+
+You can choose or create the voice you want here:
+- [https://elevenlabs.io](https://elevenlabs.io)
 
 ## Script variants
 ### Chinese version

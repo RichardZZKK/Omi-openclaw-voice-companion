@@ -36,7 +36,10 @@ export ELEVENLABS_API_KEY="your_key"
 export ELEVENLABS_VOICE_ID="your_voice_id"
 ```
 
-如果没有配置上述变量，项目会自动回退到 macOS `say`。
+如果没有配置上述变量，项目会自动回退到 macOS `say`，但就无法使用更生动、更自然、可自定义或可克隆的音色。
+
+你可以在 ElevenLabs 这里选择或创建你想要的音色：
+- [https://elevenlabs.io](https://elevenlabs.io)
 
 ## 脚本版本
 ### 中文版

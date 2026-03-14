@@ -2,8 +2,8 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-DEFAULT_HOME_PROJECT="$HOME/Esetting/omi-voice-assistant"
-DEFAULT_SIBLING_PROJECT="$(cd "$SCRIPT_DIR/../../.." && pwd)/omi-voice-assistant"
+DEFAULT_HOME_PROJECT="$HOME/Esetting/omi-voice-companion"
+DEFAULT_SIBLING_PROJECT="$(cd "$SCRIPT_DIR/../../.." && pwd)/omi-voice-companion"
 PROJECT_DIR="${OMI_VOICE_ASSISTANT_DIR:-}"
 VOICE_SCRIPT="${OMI_VOICE_ASSISTANT_SCRIPT:-voice_assistant.py}"
 DEVICE="${OMI_VOICE_ASSISTANT_DEVICE:-1}"

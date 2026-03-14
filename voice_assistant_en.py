@@ -263,7 +263,7 @@ def run_voice_assistant(device: int, voice: str, timeout: int) -> None:
     wake_detected_at = 0.0
     command_started = False
     command_listen_started_at = 0.0
-    voice_session_id = f"voice-assistant-{int(time.time())}"
+    voice_session_id = f"voice-companion-{int(time.time())}"
     followup_until = 0.0
 
     wake_window_seconds = 2.5

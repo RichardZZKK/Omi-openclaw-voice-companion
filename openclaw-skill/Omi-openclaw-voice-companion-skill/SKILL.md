@@ -11,7 +11,7 @@ Use this skill when the task involves Omi's local voice companion on macOS.
 - Start or stop the assistant in the human's frontmost `Terminal`
 - Debug wake phrase, recording, transcription, OpenClaw reply, and TTS behavior
 - Keep the workflow aligned with the human's preference that local interactive commands should be run for them when possible
-- Work with the open-source project copy at `omi-voice-assistant`
+- Work with the open-source project copy at `omi-voice-companion`
 
 ## Default behavior
 1. Prefer launching through the human's `Terminal` via AppleScript.
@@ -23,8 +23,8 @@ Use this skill when the task involves Omi's local voice companion on macOS.
 ## Project path
 By default the scripts look for the voice project in one of these places:
 - `$OMI_VOICE_ASSISTANT_DIR`
-- `$HOME/Esetting/omi-voice-assistant`
-- a sibling folder named `omi-voice-assistant`
+- `$HOME/Esetting/omi-voice-companion`
+- a sibling folder named `omi-voice-companion`
 
 ## Common commands
 Start:

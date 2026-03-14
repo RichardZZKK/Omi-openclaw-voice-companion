@@ -20,6 +20,7 @@ import os
 import subprocess
 import hashlib
 import tempfile
+import threading
 import time
 import wave
 from collections import deque
@@ -41,6 +42,7 @@ CHANNELS = 1
 BLOCKSIZE = 1024
 WAKE_PHRASES = ("hi omi", "omi", "欧米")
 EXIT_PHRASES = ("退出助手", "停止监听", "stop listening", "quit assistant")
+FAST_HINT_TEXTS = {"我在", "我没有听清", "好的，再见", "让我想想", "I'm here", "I didn't catch that", "Okay, goodbye", "Let me think"}
 
 
 class State(Enum):
@@ -278,6 +280,14 @@ def ensure_qwen_audio(text: str) -> Path | None:
 
 def ensure_tts_audio(text: str) -> Path | None:
     backend = get_effective_tts_backend()
+    if backend == "qwen":
+        def _preload_qwen() -> None:
+            try:
+                load_qwen_tts_model()
+                print("ℹ️ Qwen3-TTS 模型已预加载") if "voice_companion.py" in __file__ else print("ℹ️ Qwen3-TTS model preloaded")
+            except Exception as exc:
+                print(f"Qwen preload error: {exc}")
+        threading.Thread(target=_preload_qwen, daemon=True).start()
     if backend == "elevenlabs":
         return ensure_elevenlabs_audio(text)
     if backend == "qwen":
@@ -295,6 +305,10 @@ def speak(text: str, voice: str) -> None:
         subprocess.run(["osascript", "-e", "set volume output volume 60"], check=False)
     except Exception:
         pass
+
+    if clean in FAST_HINT_TEXTS:
+        subprocess.run(["say", "-v", voice, clean], check=False)
+        return
 
     try:
         cache_path = ensure_tts_audio(clean)

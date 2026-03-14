@@ -113,7 +113,7 @@ If you want to turn it into your own named companion, the usual approach is:
 
 ## Bundled OpenClaw Skill
 
-This project also includes a reusable OpenClaw skill at `openclaw-skill/voice-assistant`.
+This project also includes a reusable OpenClaw skill at `openclaw-skill/Omi-openclaw-voice-companion-skill`.
 If you want to maintain the voice companion as an OpenClaw add-on inside the main repository, you can build on that bundled skill directly.
 
 ## Run modes

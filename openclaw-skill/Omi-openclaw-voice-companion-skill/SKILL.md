@@ -1,9 +1,9 @@
 ---
-name: voice-assistant
+name: Omi-openclaw-voice-companion-skill
 description: "Use for Omi's local macOS voice companion workflow: starting or stopping the assistant, checking microphone and Terminal launch behavior, and iterating on the OpenClaw + speech + TTS pipeline."
 ---
 
-# Voice Assistant Skill
+# Omi OpenClaw Voice Companion Skill
 
 Use this skill when the task involves Omi's local voice companion on macOS.
 

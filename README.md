@@ -111,7 +111,7 @@ export ELEVENLABS_VOICE_ID="your_voice_id"
 
 ## 附带 OpenClaw Skill
 
-项目内已经附带一份可直接复用的 OpenClaw skill：`openclaw-skill/voice-assistant`。
+项目内已经附带一份可直接复用的 OpenClaw skill：`openclaw-skill/Omi-openclaw-voice-companion-skill`。
 如果你希望把这个语音伙伴作为 OpenClaw 的附属能力一起维护，可以直接基于这里的 skill 结构继续修改。
 
 ## 运行方式

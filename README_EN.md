@@ -35,15 +35,15 @@ Note:
 Clone the project and enter the folder:
 
 ```bash
-git clone git@github.com:RichardZZKK/Omi-openclaw-voice-assistant.git
-cd Omi-openclaw-voice-assistant
+git clone git@github.com:RichardZZKK/Omi-openclaw-voice-companion.git
+cd Omi-openclaw-voice-companion
 ```
 
 If you prefer HTTPS, you can use:
 
 ```bash
-git clone https://github.com/RichardZZKK/Omi-openclaw-voice-assistant.git
-cd Omi-openclaw-voice-assistant
+git clone https://github.com/RichardZZKK/Omi-openclaw-voice-companion.git
+cd Omi-openclaw-voice-companion
 ```
 
 Install dependencies:

@@ -33,15 +33,15 @@ English version: [README_EN.md](./README_EN.md)
 拉到本地并进入目录：
 
 ```bash
-git clone git@github.com:RichardZZKK/Omi-openclaw-voice-assistant.git
-cd Omi-openclaw-voice-assistant
+git clone git@github.com:RichardZZKK/Omi-openclaw-voice-companion.git
+cd Omi-openclaw-voice-companion
 ```
 
 如果你更习惯 HTTPS，也可以用：
 
 ```bash
-git clone https://github.com/RichardZZKK/Omi-openclaw-voice-assistant.git
-cd Omi-openclaw-voice-assistant
+git clone https://github.com/RichardZZKK/Omi-openclaw-voice-companion.git
+cd Omi-openclaw-voice-companion
 ```
 
 安装依赖：
